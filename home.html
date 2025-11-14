@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alliance Hospital - Payroll Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c5aa0;
+            --secondary: #1a3a6d;
+            --accent: #4CAF50;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --text: #333;
+            --white: #ffffff;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --success: #2ecc71;
+            --gray: #95a5a6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: #f5f7fa;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+            padding: 1.5rem 0;
+            transition: all 0.3s ease;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            padding: 0 1.5rem 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-left: 0.5rem;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+        }
+
+        .nav-links {
+            list-style: none;
+        }
+
+        .nav-links li {
+            padding: 0.8rem 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links li.active {
+            background-color: rgba(255,255,255,0.1);
+            border-left: 4px solid var(--accent);
+        }
+
+        .nav-links li:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .nav-links i {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background-color: var(--white);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* Content Area */
+        .content {
+            padding: 2rem;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .page-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-title h2 {
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background-color: var(--success);
+        }
+
+        .btn-success:hover {
+            background-color: #27ae60;
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+
+        /* Cards */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .card-icon.primary {
+            background-color: rgba(44, 90, 160, 0.1);
+            color: var(--primary);
+        }
+
+        .card-icon.success {
+            background-color: rgba(46, 204, 113, 0.1);
+            color: var(--success);
+        }
+
+        .card-icon.warning {
+            background-color: rgba(243, 156, 18, 0.1);
+            color: var(--warning);
+        }
+
+        .card-icon.danger {
+            background-color: rgba(231, 76, 60, 0.1);
+            color: var(--danger);
+        }
+
+        .card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Tables */
+        .table-container {
+            background-color: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        tbody tr:hover {
+            background-color: rgba(44, 90, 160, 0.05);
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status.paid {
+            background-color: rgba(46, 204, 113, 0.1);
+            color: var(--success);
+        }
+
+        .status.pending {
+            background-color: rgba(243, 156, 18, 0.1);
+            color: var(--warning);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn.edit {
+            background-color: rgba(52, 152, 219, 0.1);
+            color: #3498db;
+        }
+
+        .action-btn.delete {
+            background-color: rgba(231, 76, 60, 0.1);
+            color: var(--danger);
+        }
+
+        .action-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Forms */
+        .form-container {
+            background-color: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: inherit;
+            transition: border 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 1.5rem;
+        }
+
+        .tab {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab.active {
+            border-bottom: 3px solid var(--primary);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+            }
+            
+            .nav-links {
+                display: flex;
+                overflow-x: auto;
+            }
+            
+            .nav-links li {
+                white-space: nowrap;
+            }
+            
+            .cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .table-container {
+                overflow-x: auto;
+            }
+            
+            table {
+                min-width: 800px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <span class="logo-icon">🏥</span>
+            <h1>Alliance Hospital</h1>
+        </div>
+        <ul class="nav-links">
+            <li class="active"><a href="#"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="#"><i class="fas fa-users"></i> Employees</a></li>
+            <li><a href="#"><i class="fas fa-money-bill-wave"></i> Payroll</a></li>
+            <li><a href="#"><i class="fas fa-file-invoice-dollar"></i> Payslips</a></li>
+            <li><a href="#"><i class="fas fa-chart-bar"></i> Reports</a></li>
+            <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+            <li><a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <div class="search-bar">
+                <input type="text" class="form-control" placeholder="Search..." style="width: 300px;">
+            </div>
+            <div class="user-info">
+                <div class="notifications">
+                    <i class="fas fa-bell"></i>
+                </div>
+                <div class="user-avatar">HR</div>
+                <div class="user-details">
+                    <div class="user-name">HR Manager</div>
+                    <div class="user-role">Administrator</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="content">
+            <div class="page-title">
+                <h2>Payroll Management Dashboard</h2>
+                <button class="btn"><i class="fas fa-plus"></i> Process Payroll</button>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="cards">
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <h3>362</h3>
+                            <p>Total Employees</p>
+                        </div>
+                        <div class="card-icon primary">
+                            <i class="fas fa-users"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <h3>₦12.8M</h3>
+                            <p>Monthly Payroll</p>
+                        </div>
+                        <div class="card-icon success">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <h3>24</h3>
+                            <p>Pending Approvals</p>
+                        </div>
+                        <div class="card-icon warning">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <h3>5</h3>
+                            <p>Departments</p>
+                        </div>
+                        <div class="card-icon danger">
+                            <i class="fas fa-building"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <div class="tab active" data-tab="employees">Employees</div>
+                <div class="tab" data-tab="payroll">Payroll Processing</div>
+                <div class="tab" data-tab="reports">Reports</div>
+            </div>
+
+            <!-- Employees Tab -->
+            <div class="tab-content active" id="employees-tab">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Department</th>
+                                <th>Position</th>
+                                <th>Employment Type</th>
+                                <th>Salary</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>51</td>
+                                <td>Ezeklu Akachukwu Giovanni</td>
+                                <td>Pharmacy</td>
+                                <td>Pharmacist</td>
+                                <td>Full-time</td>
+                                <td>₦350,000</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <div class="action-btn edit"><i class="fas fa-edit"></i></div>
+                                        <div class="action-btn delete"><i class="fas fa-trash"></i></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>67</td>
+                                <td>Chris Obinna Delight</td>
+                                <td>Laboratory</td>
+                                <td>Lab Scientist</td>
+                                <td>Full-time</td>
+                                <td>₦280,000</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <div class="action-btn edit"><i class="fas fa-edit"></i></div>
+                                        <div class="action-btn delete"><i class="fas fa-trash"></i></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>82</td>
+                                <td>Ozoanigbo Emmanuel Chima</td>
+                                <td>Nursing</td>
+                                <td>Midwife</td>
+                                <td>Full-time</td>
+                                <td>₦320,000</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <div class="action-btn edit"><i class="fas fa-edit"></i></div>
+                                        <div class="action-btn delete"><i class="fas fa-trash"></i></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>141</td>
+                                <td>Ekeh Linda Nnenna</td>
+                                <td>Nursing</td>
+                                <td>ICU Nurse</td>
+                                <td>Full-time</td>
+                                <td>₦380,000</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <div class="action-btn edit"><i class="fas fa-edit"></i></div>
+                                        <div class="action-btn delete"><i class="fas fa-trash"></i></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>180</td>
+                                <td>Ikponmwoba Raphael</td>
+                                <td>Administration</td>
+                                <td>Procurement Officer</td>
+                                <td>Full-time</td>
+                                <td>₦250,000</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <div class="action-btn edit"><i class="fas fa-edit"></i></div>
+                                        <div class="action-btn delete"><i class="fas fa-trash"></i></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button class="btn"><i class="fas fa-plus"></i> Add Employee</button>
+            </div>
+
+            <!-- Payroll Processing Tab -->
+            <div class="tab-content" id="payroll-tab">
+                <div class="form-container">
+                    <h3>Payroll Processing - October 2023</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="pay-period">Pay Period</label>
+                            <select id="pay-period" class="form-control">
+                                <option>October 2023</option>
+                                <option>September 2023</option>
+                                <option>August 2023</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="pay-date">Pay Date</label>
+                            <input type="date" id="pay-date" class="form-control" value="2023-10-31">
+                        </div>
+                    </div>
+                    <button class="btn btn-success"><i class="fas fa-calculator"></i> Calculate Payroll</button>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Basic Salary</th>
+                                <th>Allowances</th>
+                                <th>Deductions</th>
+                                <th>Net Pay</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>51</td>
+                                <td>Ezeklu Akachukwu Giovanni</td>
+                                <td>₦350,000</td>
+                                <td>₦50,000</td>
+                                <td>₦45,000</td>
+                                <td>₦355,000</td>
+                                <td><span class="status paid">Paid</span></td>
+                            </tr>
+                            <tr>
+                                <td>67</td>
+                                <td>Chris Obinna Delight</td>
+                                <td>₦280,000</td>
+                                <td>₦35,000</td>
+                                <td>₦38,000</td>
+                                <td>₦277,000</td>
+                                <td><span class="status paid">Paid</span></td>
+                            </tr>
+                            <tr>
+                                <td>82</td>
+                                <td>Ozoanigbo Emmanuel Chima</td>
+                                <td>₦320,000</td>
+                                <td>₦45,000</td>
+                                <td>₦42,000</td>
+                                <td>₦323,000</td>
+                                <td><span class="status pending">Pending</span></td>
+                            </tr>
+                            <tr>
+                                <td>141</td>
+                                <td>Ekeh Linda Nnenna</td>
+                                <td>₦380,000</td>
+                                <td>₦60,000</td>
+                                <td>₦52,000</td>
+                                <td>₦388,000</td>
+                                <td><span class="status pending">Pending</span></td>
+                            </tr>
+                            <tr>
+                                <td>180</td>
+                                <td>Ikponmwoba Raphael</td>
+                                <td>₦250,000</td>
+                                <td>₦25,000</td>
+                                <td>₦32,000</td>
+                                <td>₦243,000</td>
+                                <td><span class="status paid">Paid</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button class="btn btn-success"><i class="fas fa-check"></i> Approve Payroll</button>
+                <button class="btn"><i class="fas fa-file-export"></i> Export to Excel</button>
+            </div>
+
+            <!-- Reports Tab -->
+            <div class="tab-content" id="reports-tab">
+                <div class="cards">
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h3>Payroll Summary</h3>
+                                <p>October 2023</p>
+                            </div>
+                            <div class="card-icon primary">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                        </div>
+                        <button class="btn" style="width: 100%; margin-top: 1rem;"><i class="fas fa-download"></i> Download</button>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h3>Tax Report</h3>
+                                <p>Q3 2023</p>
+                            </div>
+                            <div class="card-icon warning">
+                                <i class="fas fa-receipt"></i>
+                            </div>
+                        </div>
+                        <button class="btn" style="width: 100%; margin-top: 1rem;"><i class="fas fa-download"></i> Download</button>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h3>Department Report</h3>
+                                <p>By Cost Center</p>
+                            </div>
+                            <div class="card-icon success">
+                                <i class="fas fa-chart-pie"></i>
+                            </div>
+                        </div>
+                        <button class="btn" style="width: 100%; margin-top: 1rem;"><i class="fas fa-download"></i> Download</button>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Department</th>
+                                <th>Employee Count</th>
+                                <th>Total Salary</th>
+                                <th>Average Salary</th>
+                                <th>% of Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Nursing</td>
+                                <td>150</td>
+                                <td>₦48,500,000</td>
+                                <td>₦323,333</td>
+                                <td>42%</td>
+                            </tr>
+                            <tr>
+                                <td>Pharmacy</td>
+                                <td>17</td>
+                                <td>₦5,200,000</td>
+                                <td>₦305,882</td>
+                                <td>4.5%</td>
+                            </tr>
+                            <tr>
+                                <td>Laboratory</td>
+                                <td>14</td>
+                                <td>₦3,800,000</td>
+                                <td>₦271,429</td>
+                                <td>3.3%</td>
+                            </tr>
+                            <tr>
+                                <td>Administration</td>
+                                <td>85</td>
+                                <td>₦18,200,000</td>
+                                <td>₦214,118</td>
+                                <td>15.8%</td>
+                            </tr>
+                            <tr>
+                                <td>Support Services</td>
+                                <td>96</td>
+                                <td>₦12,100,000</td>
+                                <td>₦126,042</td>
+                                <td>10.5%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and contents
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                
+                // Show corresponding content
+                const tabId = tab.getAttribute('data-tab') + '-tab';
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Sample data for demonstration
+        const departments = [
+            { name: 'Nursing', count: 150, salary: 48500000 },
+            { name: 'Pharmacy', count: 17, salary: 5200000 },
+            { name: 'Laboratory', count: 14, salary: 3800000 },
+            { name: 'Administration', count: 85, salary: 18200000 },
+            { name: 'Support Services', count: 96, salary: 12100000 }
+        ];
+
+        // Calculate total employees and payroll
+        const totalEmployees = departments.reduce((sum, dept) => sum + dept.count, 0);
+        const totalPayroll = departments.reduce((sum, dept) => sum + dept.salary, 0);
+
+        // Update the stats cards with calculated values
+        document.querySelector('.card:nth-child(1) h3').textContent = totalEmployees;
+        document.querySelector('.card:nth-child(2) h3').textContent = `₦${(totalPayroll / 1000000).toFixed(1)}M`;
+    </script>
+</body>
+</html>
